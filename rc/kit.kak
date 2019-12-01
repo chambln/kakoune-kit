@@ -35,7 +35,8 @@ define-command kit-status-refresh %{
     set-option buffer readonly false
     execute-keys '%"_cRecent commits:<esc><a-!>git log -6 --oneline<ret>'
     execute-keys '6j<a-o>j<a-!>git status --porcelain 2>&1<ret>'
-    execute-keys '/^[ !\?ACDMR]{2} ([^\n]+ -> )?<ret>l<a-l>'
+    execute-keys '/^[ !\?ACDMR]{2} ([^\n]+ -> )?<ret>'
+    kit-select
     set-option buffer readonly true
 }
 
