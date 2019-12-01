@@ -11,14 +11,12 @@ define-command kit-select %{
 
 define-command kit-select-down %{
     set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?'
-    execute-keys n
-    kit-select
+    try %{ execute-keys n ; kit-select }
 }
 
 define-command kit-select-up %{
     set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?'
-    execute-keys '<a-h><a-n>'
-    kit-select
+    try %{ execute-keys '<a-h><a-n>' ; kit-select }
 }
 
 
