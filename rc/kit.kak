@@ -59,5 +59,6 @@ hook -group kit global WinSetOption filetype=kit %{
         remove-hooks window kit
         unmap window normal a ': kit-add<ret>'
         unmap window normal r ': kit-subtract<ret>'
+        unmap window normal c ': git commit<ret>'
     }
 }
