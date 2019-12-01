@@ -1,6 +1,6 @@
 define-command kit-select %{
     set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?'
-    execute-keys <a-x>s<ret><a-:>l<a-l>
+    try %{ execute-keys <a-x>s<ret><a-:>l<a-l> }
 }
 
 
