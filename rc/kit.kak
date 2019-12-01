@@ -7,7 +7,7 @@ define-command kit-select %{
 define-command kit %{
     edit -scratch *kit*
     set-option buffer filetype kit
-    execute-keys '%|git status --porcelain<ret>'
+    execute-keys '%|git status --short<ret>'
     kit-select
 }
 
