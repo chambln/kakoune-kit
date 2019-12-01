@@ -12,11 +12,11 @@ define-command -params .. kit-select %{
 }
 
 
-define-command -params ..1 kit %{
+define-command -params .. kit %{
     edit -scratch *kit*
     set-option buffer filetype kit
     execute-keys '%|git status --short<ret>'
-    kit-select %arg{1}
+    kit-select %arg{@}
 }
 
 
