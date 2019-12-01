@@ -25,9 +25,7 @@ define-command kit-add %{
         x="$(git rev-parse --show-toplevel)/$kak_selection"
         printf %s "try %{
                        execute-keys -draft '<a-h>ls <ret>'
-                       nop %sh{
-                           git restore --staged -- '$x' || git rm --cached -- '$x'
-                       }
+                       nop %sh{ git reset -- '$x' }
                    } catch %{
                        nop %sh{ git add -- '$x' }
                    }
