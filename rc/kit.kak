@@ -28,10 +28,10 @@ define-command kit-add %{
         printf %s "try %{
                        execute-keys -draft '<a-h>ls <ret>'
                        nop %sh{
-                           git restore --staged '$x' || git rm --cached '$x'
+                           git restore --staged -- '$x' || git rm --cached -- '$x'
                        }
                    } catch %{
-                       nop %sh{ git add '$x' }
+                       nop %sh{ git add -- '$x' }
                    }
                    eval -try-client docs %{ git diff --cached }
                    kit-status
@@ -69,8 +69,8 @@ hook -group kit-status-keys global WinSetOption filetype=kit-status %{
     map window normal l ': git log<ret>'
     map window normal s ': git status<ret>'
     map window normal <space> ': kit-add<ret>'
-    map window normal <ret> ': git diff "%sh{git rev-parse --show-toplevel}/<c-r>."<ret>'
-    map window goto f '<esc>: e "%sh{git rev-parse --show-toplevel}/<c-r>."<ret>'
+    map window normal <ret> ": git diff -- '%sh{git rev-parse --show-toplevel}/<c-r>.'<a-!><ret>"
+    map window goto f '<esc>: e -- "%sh{git rev-parse --show-toplevel}/<c-r>."<ret>'
 }
 
 hook -group kit-status-highlight global WinSetOption filetype=kit-status %{
