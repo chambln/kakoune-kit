@@ -3,6 +3,7 @@ define-command kit-commit %{
     eval -try-client jump %{ git commit }
 }
 
+
 define-command kit-select %{
     execute-keys '<esc><a-x>s^[ !\?ACDMR]{2} ([^\n]+ -> )?<ret><a-:>l<a-l>'
     try %{ execute-keys '<a-:><a-;><a-i>"' }
@@ -19,6 +20,7 @@ define-command kit-select-up %{
     execute-keys '<a-h><a-n>'
     kit-select
 }
+
 
 define-command kit-add %{
     evaluate-commands %sh{
@@ -41,6 +43,7 @@ define-command kit-add %{
     kit-select
 }
 
+
 define-command kit-status-refresh %{
     edit -scratch *kit*
     set-option buffer filetype kit-status
@@ -51,11 +54,13 @@ define-command kit-status-refresh %{
     set-option buffer readonly true
 }
 
+
 define-command kit-status %{
     evaluate-commands %sh{
         git rev-parse >/dev/null 2>&1 && printf kit-status-refresh
     }
 }
+
 
 hook -group kit-status-keys global WinSetOption filetype=kit-status %{
     map window normal c ': kit-commit<ret>'
