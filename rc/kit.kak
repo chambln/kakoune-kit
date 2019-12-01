@@ -29,14 +29,11 @@ define-command kit-add %{
                    } catch %{
                        nop %sh{ git add -- '$x' }
                    }
-                   eval -try-client docs %{ git diff --cached }
                    kit-status
-                   try %{
-                       set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?$kak_selection'
-                       execute-keys n
-                   }"
+                   set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?$kak_selection'"
     }
-    kit-select
+    try %{ execute-keys n ; kit-select }
+    eval -try-client docs %{ git diff --cached }
 }
 
 
