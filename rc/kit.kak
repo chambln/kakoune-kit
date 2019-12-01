@@ -9,7 +9,6 @@ define-command kit-select %{
 }
 
 define-command kit-add %{
-    kit-select
     evaluate-commands %sh{
         x="$(git rev-parse --show-toplevel)/$kak_selection"
         printf %s "try %{
@@ -25,9 +24,9 @@ define-command kit-add %{
                    try %{
                        set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?$kak_selection'
                        execute-keys n
-                       kit-select
                    }"
     }
+    kit-select
 }
 
 define-command kit-status-refresh %{
