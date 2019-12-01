@@ -15,7 +15,9 @@ define-command -params .. kit-select %{
 define-command -params .. kit %{
     edit -scratch *kit*
     set-option buffer filetype kit
+    set-option buffer readonly false
     execute-keys '%|git status --short<ret>'
+    set-option buffer readonly true
     kit-select %arg{@}
 }
 
