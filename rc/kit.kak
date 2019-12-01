@@ -8,6 +8,18 @@ define-command kit-select %{
     try %{ execute-keys '<a-:><a-;><a-i>"' }
 }
 
+define-command kit-select-down %{
+    set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?'
+    execute-keys n
+    kit-select
+}
+
+define-command kit-select-up %{
+    set-register / '^[ !\?ACDMR]{2} ([^\n]+ -> )?'
+    execute-keys '<a-h><a-n>'
+    kit-select
+}
+
 define-command kit-add %{
     evaluate-commands %sh{
         x="$(git rev-parse --show-toplevel)/$kak_selection"
@@ -35,8 +47,7 @@ define-command kit-status-refresh %{
     set-option buffer readonly false
     execute-keys '%"_cRecent commits:<esc><a-!>git log -6 --oneline<ret>'
     execute-keys '6j<a-o>j<a-!>git status --porcelain 2>&1<ret>'
-    execute-keys '/^[ !\?ACDMR]{2} ([^\n]+ -> )?<ret>'
-    kit-select
+    kit-select-down
     set-option buffer readonly true
 }
 
@@ -48,8 +59,8 @@ define-command kit-status %{
 
 hook -group kit-status-keys global WinSetOption filetype=kit-status %{
     map window normal c ': kit-commit<ret>'
-    map window normal j          '/^[ !\?ACDMR]{2} ([^\n]+ -> )?<ret>: kit-select<ret><a-:>'
-    map window normal k '<a-h><a-/>^[ !\?ACDMR]{2} ([^\n]+ -> )?<ret>: kit-select<ret><a-:><a-;>'
+    map window normal j ': kit-select-down<ret>'
+    map window normal k ': kit-select-up<ret>'
     map window normal l ': git log<ret>'
     map window normal s ': git status<ret>'
     map window normal <space> ': kit-add<ret>'
