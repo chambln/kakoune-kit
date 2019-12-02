@@ -2,7 +2,7 @@ define-command kit-construct %{
     set-option buffer readonly false
     execute-keys '%"_cRecent commits:<ret>'
     execute-keys '<a-;>!git log -6 --oneline<ret><ret><esc>'
-    execute-keys '|git status -z<ret>s\0<ret>r<ret>gh'
+    execute-keys '|git status -zb<ret>s\0<ret>r<ret>gh'
     try %{ execute-keys 'sR<ret>LLdjPkxdp<a-J>i -><esc>' }
     execute-keys '<a-a>p'
     set-option buffer readonly true
@@ -45,6 +45,7 @@ hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit group
     add-highlighter window/kit/ regex '^Recent commits:$' 0:title
     add-highlighter window/kit/ regex '^[0-9a-f]{7} ' 0:comment
+    add-highlighter window/kit/ regex '^## (\S+)(\.\.\.)?((\S+$))?' 0:comment 1:builtin 2:builtin
     add-highlighter window/kit/ regex '^(?:(M)|(A)|([D!?])|(R)|(C))[ !\?ACDMR] (?:.+?)$' 1:yellow 2:green 3:red 4:cyan 5:blue
     add-highlighter window/kit/ regex '^[ !\?ACDMR](?:(M)|(A)|([D!?])|(R)|(C)) (?:.+?)$' 1:yellow 2:green 3:red 4:cyan 5:blue
     add-highlighter window/kit/ regex '^R[ !\?ACDMR] [^\n]+( -> )' 1:cyan
