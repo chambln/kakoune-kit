@@ -64,6 +64,7 @@ hook -group kit global WinSetOption filetype=kit %{
     map window normal r '*: kit-subtract; try %{exec s<lt>ret<gt>}<ret>'
     map window normal c ': git commit<ret>'
     map window normal \; ': kit-select<ret>'
+    map window normal <a-x> ': kit-select<ret>'
     map window normal x <space>j
     map window normal X J
 
@@ -74,6 +75,7 @@ hook -group kit global WinSetOption filetype=kit %{
         unmap window normal r '*: kit-subtract; try %{exec s<lt>ret<gt>}<ret>'
         unmap window normal c ': git commit<ret>'
         unmap window normal \; ': kit-select<ret>'
+        unmap window normal <a-x> ': kit-select<ret>'
         unmap window normal x <space>j
         unmap window normal X J
     }
