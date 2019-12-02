@@ -3,7 +3,7 @@ define-command kit-select %{
 }
 
 
-define-command kit-refresh %{
+define-command kit-rebuild %{
     set-option buffer readonly false
     execute-keys '%"_cRecent commits:<ret>'
     execute-keys '<a-;>!git log -6 --oneline<ret><ret><esc>'
@@ -12,15 +12,15 @@ define-command kit-refresh %{
     set-option buffer readonly true
     kit-select
 }
-define-command kit-refresh-restore %{
-    execute-keys '*: kit-refresh; try %{exec s<lt>ret<gt>}<ret>'
+define-command kit-refresh %{
+    execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
 }
 
 
 define-command kit %{
     edit -scratch *kit*
     set-option buffer filetype kit
-    kit-refresh
+    kit-rebuild
 }
 
 
@@ -31,7 +31,7 @@ define-command kit-add %{
             git add -- "$target"
         }
     }
-    kit-refresh-restore
+    kit-refresh
 }
 
 
@@ -44,7 +44,7 @@ define-command kit-subtract %{
             }
         }
     }
-    kit-refresh-restore
+    kit-refresh
 }
 
 
