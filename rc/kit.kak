@@ -70,5 +70,12 @@ hook -group kit global WinSetOption filetype=kit %{
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
         remove-hooks window kit
+        unmap window normal a ': kit-add<ret>'
+        unmap window normal r ': kit-subtract<ret>'
+        unmap window normal c ': git commit<ret>'
+        unmap window normal \; ': kit-select<ret>'
+        unmap window normal <a-x> ': kit-select<ret>'
+        unmap window normal x '<a-:>5L4H<a-;>ZghLLL<a-z>a<a-:>x: kit-select<ret>'
+        unmap window normal X '<a-:>5L4H<a-;>ZghLLL<a-z>a<a-:>X: kit-select<ret>'
     }
 }
