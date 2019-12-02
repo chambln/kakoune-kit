@@ -26,10 +26,7 @@ define-command kit %{
 
 define-command kit-add %{
     evaluate-commands -itersel %{
-        nop %sh{
-            target="$(git rev-parse --show-toplevel)/$kak_selection"
-            git add -- "$target"
-        }
+        nop %sh{ git add -- "$(git rev-parse --show-toplevel)/$kak_selection" }
     }
     kit-refresh
 }
@@ -39,9 +36,7 @@ define-command kit-subtract %{
     evaluate-commands -itersel %{
         nop %sh{
             target="$(git rev-parse --show-toplevel)/$kak_selection"
-            git reset -- "$target" || {
-                git restore --staged -- "$target"
-            }
+            git reset -- "$target" || git restore --staged -- "$target"
         }
     }
     kit-refresh
