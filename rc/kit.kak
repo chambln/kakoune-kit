@@ -2,9 +2,8 @@ define-command kit-construct %{
     set-option buffer readonly false
     execute-keys '%"_cRecent commits:<ret>'
     execute-keys '<a-;>!git log -6 --oneline<ret><ret><esc>'
-    execute-keys '|git status -zb<ret>s\0<ret>r<ret>gh'
+    execute-keys '|git status -zb<ret>s\0<ret>r<ret>ghj'
     try %{ execute-keys 'sR<ret>LLdjPkxdp<a-J>i -><esc>' }
-    execute-keys '<a-a>p'
     set-option buffer readonly true
 }
 
