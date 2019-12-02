@@ -77,5 +77,6 @@ hook -group kit global WinSetOption filetype=kit %{
         unmap window normal <a-x> ': kit-select<ret>'
         unmap window normal x '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>x: kit-select<ret>'
         unmap window normal X '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>X: kit-select<ret>'
+        set-option buffer readonly false
     }
 }
