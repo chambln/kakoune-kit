@@ -10,8 +10,7 @@ define-command kit-construct %{
 
 
 define-command kit-select %{
-    set-register / '^[ !\?ACDMRT]{2} '
-    try %{ execute-keys '<a-x>s<ret><a-:>l<a-l>S -> <ret>' }
+    try %{ execute-keys '<a-x>s^[ !\?ACDMRT]{2} <ret><a-:>l<a-l>S -> <ret>' }
 }
 
 
