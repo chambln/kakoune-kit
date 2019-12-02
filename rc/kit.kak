@@ -64,8 +64,8 @@ hook -group kit global WinSetOption filetype=kit %{
     map window normal c ': git commit<ret>'
     map window normal \; ': kit-select<ret>'
     map window normal <a-x> ': kit-select<ret>'
-    map window normal x '<a-:>5L4H<a-;><a-H><a-:>x: kit-select<ret>'
-    map window normal X '<a-:>5L4H<a-;><a-H><a-:>X: kit-select<ret>'
+    map window normal x '<a-:>5L4H<a-;>HHH<a-:>x: kit-select<ret>'
+    map window normal X '<a-:>5L4H<a-;>HHH<a-:>X: kit-select<ret>'
 
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
