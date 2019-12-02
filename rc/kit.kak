@@ -45,7 +45,7 @@ hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit group
     add-highlighter window/kit/ regex '^Recent commits:$' 0:title
     add-highlighter window/kit/ regex '^[0-9a-f]{7} ' 0:comment
-    add-highlighter window/kit/ regex '^## (\S+)(\.\.\.)?((\S+$))?' 0:comment 1:builtin 2:builtin
+    add-highlighter window/kit/ regex '^(##) (\S+) (\[[^\n]+\])' 1:comment 2:builtin 3:keyword
     add-highlighter window/kit/ regex '^(?:(M)|(A)|([D!?])|(R)|(C))[ !\?ACDMR] (?:.+?)$' 1:yellow 2:green 3:red 4:cyan 5:blue
     add-highlighter window/kit/ regex '^[ !\?ACDMR](?:(M)|(A)|([D!?])|(R)|(C)) (?:.+?)$' 1:yellow 2:green 3:red 4:cyan 5:blue
     add-highlighter window/kit/ regex '^R[ !\?ACDMR] [^\n]+( -> )' 1:cyan
