@@ -30,6 +30,9 @@ define-command kit-add %{
             git add -- "$target"
         }
     }
+    kit-construct
+    execute-keys '%'
+    kit-select
 }
 
 
@@ -42,6 +45,9 @@ define-command kit-subtract %{
             }
         }
     }
+    kit-construct
+    execute-keys '%'
+    kit-select
 }
 
 
@@ -54,18 +60,18 @@ hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit/ regex '^[ !\?ACDMR](?:(M)|(A)|([D!?])|(R)|(C)) (?:.+?)$' 1:yellow 2:green 3:red 4:cyan 5:blue
     add-highlighter window/kit/ regex '^R[ !\?ACDMR] [^\n]+( -> )' 1:cyan
 
-    hook -group kit window NormalKey '[JKjkx%]' %{ try kit-select }
+    hook -group kit window NormalKey '[JKjkx%]' kit-select
 
-    map window normal a '*: kit-add;kit-construct<ret>s<ret>'
-    map window normal r '*: kit-subtract;kit-construct<ret>s<ret>'
+    map window normal a '*: kit-add; try %{exec s<lt>ret<gt>}<ret>'
+    map window normal r '*: kit-subtract; try %{exec s<lt>ret<gt>}<ret>'
     map window normal c ': git commit<ret>'
     map window normal \; ': kit-select<ret>'
 
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
         remove-hooks window kit
-        unmap window normal a '*: kit-add;kit-construct<ret>s<ret>'
-        unmap window normal r '*: kit-subtract;kit-construct<ret>s<ret>'
+        unmap window normal a '*: kit-add; try %{exec s<lt>ret<gt>}<ret>'
+        unmap window normal r '*: kit-subtract; try %{exec s<lt>ret<gt>}<ret>'
         unmap window normal c ': git commit<ret>'
         unmap window normal \; ': kit-select<ret>'
     }
