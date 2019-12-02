@@ -59,12 +59,14 @@ hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit/ regex '^[ !\?ACDMRT](?:(M)|(A)|([D!?])|(R)|(C)) (?:.+?)$' 1:yellow 2:green 3:red 4:cyan 5:blue
     add-highlighter window/kit/ regex '^R[ !\?ACDMRT] [^\n]+( -> )' 1:cyan
 
-    hook -group kit window NormalKey '[JKjkx%]' kit-select
+    hook -group kit window NormalKey '[JKjkxX%]' kit-select
 
     map window normal a '*: kit-add; try %{exec s<lt>ret<gt>}<ret>'
     map window normal r '*: kit-subtract; try %{exec s<lt>ret<gt>}<ret>'
     map window normal c ': git commit<ret>'
     map window normal \; ': kit-select<ret>'
+    map window normal x <space>j
+    map window normal X J
 
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
@@ -73,5 +75,7 @@ hook -group kit global WinSetOption filetype=kit %{
         unmap window normal r '*: kit-subtract; try %{exec s<lt>ret<gt>}<ret>'
         unmap window normal c ': git commit<ret>'
         unmap window normal \; ': kit-select<ret>'
+        unmap window normal x <space>j
+        unmap window normal X J
     }
 }
