@@ -25,7 +25,6 @@ define-command kit-add %{
     evaluate-commands -itersel %{
         nop %sh{ git add -- "$kak_selection" }
     }
-    kit-construct
 }
 
 
@@ -37,7 +36,6 @@ define-command kit-subtract %{
             }
         }
     }
-    kit-construct
 }
 
 
@@ -51,16 +49,16 @@ hook -group kit global WinSetOption filetype=kit %{
 
     hook -group kit window NormalKey '[JKjkx%]' %{ try kit-select }
 
-    map window normal a '*: kit-add<ret>s<ret>'
-    map window normal r '*: kit-subtract<ret>s<ret>'
+    map window normal a '*: kit-add;kit-construct<ret>s<ret>'
+    map window normal r '*: kit-subtract;kit-construct<ret>s<ret>'
     map window normal c ': git commit<ret>'
     map window normal \; ': kit-select<ret>'
 
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
         remove-hooks window kit
-        unmap window normal a '*: kit-add<ret>s<ret>'
-        unmap window normal r '*: kit-subtract<ret>s<ret>'
+        unmap window normal a '*: kit-add;kit-construct<ret>s<ret>'
+        unmap window normal r '*: kit-subtract;kit-construct<ret>s<ret>'
         unmap window normal c ': git commit<ret>'
         unmap window normal \; ': kit-select<ret>'
     }
