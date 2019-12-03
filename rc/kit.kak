@@ -4,10 +4,14 @@ define-command -hidden kit-select %{
     unmap window normal r
     try %{
         # Select paths
-        execute-keys '<a-x>s^[ !\?ACDMRT]{2} <ret><a-:>l<a-l>S -> <ret>'
-        map window normal a ': kit-add<ret>'
-        map window normal d ': git diff -- %val{selections}<a-!><ret>'
-        map window normal r ': kit-subtract<ret>'
+        execute-keys '<a-x>s^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S -> <ret>'
+        map window normal -docstring add   a ': kit-add<ret>'
+        map window normal -docstring add   h ': kit-add<ret>'
+        map window normal -docstring add   H ': kit-add<ret>'
+        map window normal -docstring diff  d ': git diff -- %val{selections}<a-!><ret>'
+        map window normal -docstring subtract l ': kit-subtract<ret>'
+        map window normal -docstring subtract L ': kit-subtract<ret>'
+        map window normal -docstring subtract r ': kit-subtract<ret>'
         echo -markup {Information}kit: (a)dd (d)iff (r)eset
     } catch %{
         # Select truncated SHA-1
@@ -63,9 +67,9 @@ hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit/ regex '^Recent commits:$' 0:title
     add-highlighter window/kit/ regex '^[0-9a-f]{7} ' 0:comment
     add-highlighter window/kit/ regex '^(##) (\S+)(( \[[^\n]+\]))?' 1:comment 2:builtin 3:keyword
-    add-highlighter window/kit/ regex '^(?:(A)|(C)|([D!?])|(M)|(R)|(T))[ !\?ACDMRT] (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
-    add-highlighter window/kit/ regex '^[ !\?ACDMRT](?:(A)|(C)|([D!?])|(M)|(R)|(T)) (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
-    add-highlighter window/kit/ regex '^R[ !\?ACDMRT] [^\n]+( -> )' 1:cyan
+    add-highlighter window/kit/ regex '^(?:(A)|(C)|([D!?])|([MU])|(R)|(T))[ !\?ACDMRTU] (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
+    add-highlighter window/kit/ regex '^[ !\?ACDMRTU](?:(A)|(C)|([D!?])|([MU])|(R)|(T)) (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
+    add-highlighter window/kit/ regex '^R[ !\?ACDMRTU] [^\n]+( -> )' 1:cyan
 
     hook -group kit window NormalKey '[JKjkhlHLxX%]' kit-select
 
