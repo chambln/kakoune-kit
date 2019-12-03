@@ -1,10 +1,17 @@
 define-command kit-select %{
+    unmap window normal a
+    unmap window normal r
+    unmap window normal <ret>
     try %{
         # Select paths
         execute-keys '<a-x>s^[ !\?ACDMRT]{2} <ret><a-:>l<a-l>S -> <ret>'
+        map window normal a ': kit-add<ret>'
+        map window normal r ': kit-subtract<ret>'
+        map window normal <ret> ': git diff -- %val{selections}<a-!><ret>'
     } catch %{
         # Select truncated SHA-1
         execute-keys '<a-x>s^[0-9a-f]{7}<ret>'
+        map window normal <ret> ': git show %val{selections}<a-!><ret>'
     } catch nop
 }
 
@@ -60,8 +67,6 @@ hook -group kit global WinSetOption filetype=kit %{
 
     hook -group kit window NormalKey '[JKjkhlHLxX%]' kit-select
 
-    map window normal a ': kit-add<ret>'
-    map window normal r ': kit-subtract<ret>'
     map window normal c ': git commit<ret>'
     map window normal \; ': kit-select<ret>'
     map window normal <a-x> ': kit-select<ret>'
@@ -71,8 +76,9 @@ hook -group kit global WinSetOption filetype=kit %{
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
         remove-hooks window kit
-        unmap window normal a ': kit-add<ret>'
-        unmap window normal r ': kit-subtract<ret>'
+        unmap window normal a
+        unmap window normal r
+        unmap window normal <ret>
         unmap window normal c ': git commit<ret>'
         unmap window normal \; ': kit-select<ret>'
         unmap window normal <a-x> ': kit-select<ret>'
