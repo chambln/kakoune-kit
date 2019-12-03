@@ -1,5 +1,11 @@
 define-command kit-select %{
-    try %{ execute-keys '<a-x>s^[ !\?ACDMRT]{2} <ret><a-:>l<a-l>S -> <ret>' }
+    try %{
+        # Select paths
+        execute-keys '<a-x>s^[ !\?ACDMRT]{2} <ret><a-:>l<a-l>S -> <ret>'
+    } catch %{
+        # Select truncated SHA-1
+        execute-keys '<a-x>s^[0-9a-f]{7}<ret>'
+    } catch nop
 }
 
 
