@@ -5,10 +5,13 @@ There’s no magic here.
 ## To-do
 
   - [ ] Init and clone
+  - [x] Summon diffs of selected pathspecs
+    - Fails if Kakoune’s working directory isn’t the repo’s toplevel
+  - [ ] Summon diffs of selected commits
   - [x] Stage and unstage files
   - [ ] Stage hunks
   - [x] Create commits
-  - [ ] Create commits without relying on `git.kak`
+    - Relies on `git.kak` for now
   - [ ] Create tags
   - [ ] Create branches
   - [ ] Explore history
