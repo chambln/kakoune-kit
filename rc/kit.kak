@@ -52,7 +52,7 @@ hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit/ regex '^[ !\?ACDMRT](?:(A)|(C)|([D!?])|(M)|(R)|(T)) (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
     add-highlighter window/kit/ regex '^R[ !\?ACDMRT] [^\n]+( -> )' 1:cyan
 
-    hook -group kit window NormalKey '[JKjkxX%]' kit-select
+    hook -group kit window NormalKey '[JKjkhlHLxX%]' kit-select
 
     map window normal a ': kit-add<ret>'
     map window normal r ': kit-subtract<ret>'
