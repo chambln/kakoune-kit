@@ -1,22 +1,22 @@
-define-command kit-select %{
+define-command -hidden kit-select %{
     unmap window normal a
+    unmap window normal d
     unmap window normal r
-    unmap window normal <ret>
     try %{
         # Select paths
         execute-keys '<a-x>s^[ !\?ACDMRT]{2} <ret><a-:>l<a-l>S -> <ret>'
         map window normal a ': kit-add<ret>'
+        map window normal d ': git diff -- %val{selections}<a-!><ret>'
         map window normal r ': kit-subtract<ret>'
-        map window normal <ret> ': git diff -- %val{selections}<a-!><ret>'
     } catch %{
         # Select truncated SHA-1
         execute-keys '<a-x>s^[0-9a-f]{7}<ret>'
-        map window normal <ret> ': git show %val{selections}<a-!><ret>'
+        map window normal d ': git show %val{selections}<a-!><ret>'
     } catch nop
 }
 
 
-define-command kit-rebuild %{
+define-command -hidden kit-rebuild %{
     set-option buffer readonly false
     execute-keys '%"_cRecent commits:<ret>'
     execute-keys '<a-;>!git log -6 --oneline<ret><ret><esc>'
@@ -25,7 +25,8 @@ define-command kit-rebuild %{
     set-option buffer readonly true
     kit-select
 }
-define-command kit-refresh %{
+
+define-command -hidden kit-refresh %{
     execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
 }
 
@@ -37,7 +38,7 @@ define-command kit %{
 }
 
 
-define-command kit-add %{
+define-command -hidden kit-add %{
     evaluate-commands -itersel %{
         nop %sh{ git add -- "$(git rev-parse --show-toplevel)/$kak_selection" }
     }
@@ -45,7 +46,7 @@ define-command kit-add %{
 }
 
 
-define-command kit-subtract %{
+define-command -hidden kit-subtract %{
     evaluate-commands -itersel %{
         nop %sh{
             target="$(git rev-parse --show-toplevel)/$kak_selection"
@@ -77,10 +78,10 @@ hook -group kit global WinSetOption filetype=kit %{
         remove-highlighter window/kit
         remove-hooks window kit
         unmap window normal a
-        unmap window normal r
-        unmap window normal <ret>
         unmap window normal c ': git commit<ret>'
+        unmap window normal d
         unmap window normal \; ': kit-select<ret>'
+        unmap window normal r
         unmap window normal <a-x> ': kit-select<ret>'
         unmap window normal x '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>x: kit-select<ret>'
         unmap window normal X '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>X: kit-select<ret>'
