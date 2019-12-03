@@ -1,8 +1,3 @@
-define-command -hidden kit-help %{
-    echo (a)dd (c)ommit (d)iff (r)eset 
-}
-
-
 define-command -hidden kit-select %{
     unmap window normal a
     unmap window normal d
@@ -13,12 +8,13 @@ define-command -hidden kit-select %{
         map window normal a ': kit-add<ret>'
         map window normal d ': git diff -- %val{selections}<a-!><ret>'
         map window normal r ': kit-subtract<ret>'
+        echo (a)dd (d)iff (r)eset
     } catch %{
         # Select truncated SHA-1
         execute-keys '<a-x>s^[0-9a-f]{7}<ret>'
         map window normal d ': git show %val{selections}<a-!><ret>'
+        echo (d)iff
     } catch nop
-    kit-help
 }
 
 
@@ -34,7 +30,6 @@ define-command -hidden kit-rebuild %{
 
 define-command -hidden kit-refresh %{
     execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
-    kit-help
 }
 
 
