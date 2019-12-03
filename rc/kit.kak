@@ -8,12 +8,12 @@ define-command -hidden kit-select %{
         map window normal a ': kit-add<ret>'
         map window normal d ': git diff -- %val{selections}<a-!><ret>'
         map window normal r ': kit-subtract<ret>'
-        echo (a)dd (d)iff (r)eset
+        echo -markup {Information}kit: (a)dd (d)iff (r)eset
     } catch %{
         # Select truncated SHA-1
         execute-keys '<a-x>s^[0-9a-f]{7}<ret>'
         map window normal d ': git show %val{selections}<a-!><ret>'
-        echo (d)iff
+        echo -markup {Information}kit: (d)iff
     } catch nop
 }
 
