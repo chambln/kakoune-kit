@@ -1,3 +1,8 @@
+define-command -hidden kit-help %{
+    echo (a)dd (c)ommit (d)iff (r)eset 
+}
+
+
 define-command -hidden kit-select %{
     unmap window normal a
     unmap window normal d
@@ -13,6 +18,7 @@ define-command -hidden kit-select %{
         execute-keys '<a-x>s^[0-9a-f]{7}<ret>'
         map window normal d ': git show %val{selections}<a-!><ret>'
     } catch nop
+    kit-help
 }
 
 
@@ -28,6 +34,7 @@ define-command -hidden kit-rebuild %{
 
 define-command -hidden kit-refresh %{
     execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
+    kit-help
 }
 
 
@@ -36,7 +43,6 @@ define-command kit %{
     set-option buffer filetype kit
     kit-rebuild
 }
-
 
 define-command -hidden kit-add %{
     evaluate-commands -itersel %{
