@@ -68,6 +68,7 @@ hook -group kit global WinSetOption filetype=kit %{
     hook -group kit window NormalKey '[JKjkhlHLxX%]' kit-select
 
     map window normal c ': git commit<ret>'
+    map window normal l ': git log<ret>'
     map window normal \; ': kit-select<ret>'
     map window normal <a-x> ': kit-select<ret>'
     map window normal x '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>x: kit-select<ret>'
@@ -77,6 +78,7 @@ hook -group kit global WinSetOption filetype=kit %{
         remove-highlighter window/kit
         remove-hooks window kit
         unmap window normal c ': git commit<ret>'
+        unmap window normal l ': git log<ret>'
         unmap window normal \; ': kit-select<ret>'
         unmap window normal <a-x> ': kit-select<ret>'
         unmap window normal x '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>x: kit-select<ret>'
