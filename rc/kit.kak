@@ -5,19 +5,13 @@ define-command -hidden kit-select %{
     try %{
         # Select paths
         execute-keys '<a-x>s^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S -> <ret>'
-        map window normal -docstring add   a ': kit-add<ret>'
-        map window normal -docstring add   h ': kit-add<ret>'
-        map window normal -docstring add   H ': kit-add<ret>'
-        map window normal -docstring diff  d ': git diff -- %val{selections}<a-!><ret>'
-        map window normal -docstring subtract l ': kit-subtract<ret>'
-        map window normal -docstring subtract L ': kit-subtract<ret>'
+        map window normal -docstring add a ': kit-add<ret>'
+        map window normal -docstring diff d ': git diff -- %val{selections}<a-!><ret>'
         map window normal -docstring subtract r ': kit-subtract<ret>'
-        echo -markup {Information}kit: (a)dd (d)iff (r)eset
     } catch %{
         # Select truncated SHA-1
         execute-keys '<a-x>s^[0-9a-f]{7}<ret>'
-        map window normal d ': git show %val{selections}<a-!><ret>'
-        echo -markup {Information}kit: (d)iff
+        map window normal -docstring show d ': git show %val{selections}<a-!><ret>'
     } catch nop
 }
 
@@ -32,16 +26,16 @@ define-command -hidden kit-rebuild %{
     kit-select
 }
 
-define-command -hidden kit-refresh %{
-    execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
-}
-
-
 define-command kit %{
     edit -scratch *kit*
     set-option buffer filetype kit
     kit-rebuild
 }
+
+define-command -hidden kit-refresh %{
+    execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
+}
+
 
 define-command -hidden kit-add %{
     evaluate-commands -itersel %{
@@ -82,14 +76,14 @@ hook -group kit global WinSetOption filetype=kit %{
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
         remove-hooks window kit
-        unmap window normal a
         unmap window normal c ': git commit<ret>'
-        unmap window normal d
         unmap window normal \; ': kit-select<ret>'
-        unmap window normal r
         unmap window normal <a-x> ': kit-select<ret>'
         unmap window normal x '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>x: kit-select<ret>'
         unmap window normal X '<a-:>5L4H<a-;>Zgh3L<a-z>a<a-:>X: kit-select<ret>'
+        unmap window normal a
+        unmap window normal d
+        unmap window normal r
         set-option buffer readonly false
     }
 }
