@@ -63,6 +63,26 @@ define-command -hidden kit-subtract %{
 }
 
 
+define-command -hidden kit-commit %{
+    evaluate-commands %sh{
+        GIT_EDITOR='' EDITOR='' git commit > /dev/null 2>&1
+        msgfile="$(git rev-parse --git-dir)/COMMIT_EDITMSG"
+        printf %s "edit '$msgfile'
+                   hook buffer BufWritePost '.*\Q$msgfile\E' %{
+                       evaluate-commands %sh{
+                           if git commit -F '$msgfile' --cleanup=strip $* > /dev/null; then
+                               printf %s 'evaluate-commands -client $kak_client echo -markup %{{Information}Commit succeeded}
+                                          delete-buffer
+                                          kit'
+                           else
+                               printf 'evaluate-commands -client %s fail Commit failed\n' "$kak_client"
+                           fi
+                       }
+                   }"
+    }
+}
+
+
 hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit group
     add-highlighter window/kit/ regex '^Recent commits:$' 0:title
@@ -75,7 +95,7 @@ hook -group kit global WinSetOption filetype=kit %{
     hook -group kit window NormalKey '[JKjkhlHLxX%]' kit-select
 
     map window goto f '<esc>: kit-goto-file<ret>'
-    map window normal c ': git commit<ret>'
+    map window normal c ': kit-commit<ret>'
     map window normal l ': git log<ret>'
     map window normal \; ': kit-select<ret>'
     map window normal <a-x> ': kit-select<ret>'
@@ -86,7 +106,7 @@ hook -group kit global WinSetOption filetype=kit %{
         remove-highlighter window/kit
         remove-hooks window kit
         unmap window goto f '<esc>: kit-goto-file<ret>'
-        unmap window normal c ': git commit<ret>'
+        unmap window normal c ': kit-commit<ret>'
         unmap window normal l ': git log<ret>'
         unmap window normal \; ': kit-select<ret>'
         unmap window normal <a-x> ': kit-select<ret>'
