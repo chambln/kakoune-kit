@@ -4,7 +4,7 @@ define-command -hidden kit-select %{
     unmap window normal r
     try %{
         # Select paths
-        execute-keys '<a-x>s^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S -> <ret>'
+        execute-keys '<a-x>s^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S → <ret>'
         map window normal -docstring add a ': kit-add<ret>'
         map window normal -docstring diff d ': git diff -- %val{selections}<a-!><ret>'
         map window normal -docstring subtract r ': kit-subtract<ret>'
@@ -21,7 +21,7 @@ define-command -hidden kit-rebuild %{
     execute-keys '%"_cRecent commits:<ret>'
     execute-keys '<a-;>!git log -6 --oneline<ret><ret><esc>'
     execute-keys '|git status -zb<ret>s\0<ret>r<ret>ghj'
-    try %{ execute-keys 'sR<ret>LLdjPkxdp<a-J>i -><esc>%' }
+    try %{ execute-keys 'sR<ret>LLdjPkxdp<a-J>i →<esc>%' }
     set-option buffer readonly true
     kit-select
 }
@@ -63,7 +63,7 @@ hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit/ regex '^(##) (\S+)(( \[[^\n]+\]))?' 1:comment 2:builtin 3:keyword
     add-highlighter window/kit/ regex '^(?:(A)|(C)|([D!?])|([MU])|(R)|(T))[ !\?ACDMRTU] (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
     add-highlighter window/kit/ regex '^[ !\?ACDMRTU](?:(A)|(C)|([D!?])|([MU])|(R)|(T)) (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
-    add-highlighter window/kit/ regex '^R[ !\?ACDMRTU] [^\n]+( -> )' 1:cyan
+    add-highlighter window/kit/ regex '^R[ !\?ACDMRTU] [^\n]+( → )' 1:cyan
 
     hook -group kit window NormalKey '[JKjkhlHLxX%]' kit-select
 
