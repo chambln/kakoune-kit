@@ -1,3 +1,10 @@
+define-command kit-goto-file %{
+    edit -existing -- %sh{
+        printf %s "$(git rev-parse --show-toplevel)/$kak_selection"
+    }
+}
+
+
 define-command -hidden kit-select %{
     unmap window normal a
     unmap window normal d
@@ -67,6 +74,7 @@ hook -group kit global WinSetOption filetype=kit %{
 
     hook -group kit window NormalKey '[JKjkhlHLxX%]' kit-select
 
+    map window goto f '<esc>: kit-goto-file<ret>'
     map window normal c ': git commit<ret>'
     map window normal l ': git log<ret>'
     map window normal \; ': kit-select<ret>'
@@ -77,6 +85,7 @@ hook -group kit global WinSetOption filetype=kit %{
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
         remove-hooks window kit
+        unmap window goto f '<esc>: kit-goto-file<ret>'
         unmap window normal c ': git commit<ret>'
         unmap window normal l ': git log<ret>'
         unmap window normal \; ': kit-select<ret>'
