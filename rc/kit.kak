@@ -32,6 +32,10 @@ define-command -hidden kit-rebuild %{
     set-option buffer readonly true
     kit-select
 }
+define-command -hidden kit-refresh %{
+    execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
+}
+
 
 define-command kit %{
     edit -scratch *kit*
@@ -39,8 +43,23 @@ define-command kit %{
     kit-rebuild
 }
 
-define-command -hidden kit-refresh %{
-    execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret>'
+define-command -hidden kit-commit %{
+    evaluate-commands %sh{
+        GIT_EDITOR='' EDITOR='' git commit > /dev/null 2>&1
+        msgfile="$(git rev-parse --git-dir)/COMMIT_EDITMSG"
+        printf %s "edit '$msgfile'
+                   hook buffer BufWritePost '.*\Q$msgfile\E' %{
+                       evaluate-commands %sh{
+                           if git commit -F '$msgfile' --cleanup=strip $* > /dev/null; then
+                               printf %s 'evaluate-commands -client $kak_client echo -markup %{{Information}Commit succeeded}
+                                          delete-buffer
+                                          kit'
+                           else
+                               printf 'evaluate-commands -client %s fail Commit failed\n' "$kak_client"
+                           fi
+                       }
+                   }"
+    }
 }
 
 
@@ -60,26 +79,6 @@ define-command -hidden kit-subtract %{
         }
     }
     kit-refresh
-}
-
-
-define-command -hidden kit-commit %{
-    evaluate-commands %sh{
-        GIT_EDITOR='' EDITOR='' git commit > /dev/null 2>&1
-        msgfile="$(git rev-parse --git-dir)/COMMIT_EDITMSG"
-        printf %s "edit '$msgfile'
-                   hook buffer BufWritePost '.*\Q$msgfile\E' %{
-                       evaluate-commands %sh{
-                           if git commit -F '$msgfile' --cleanup=strip $* > /dev/null; then
-                               printf %s 'evaluate-commands -client $kak_client echo -markup %{{Information}Commit succeeded}
-                                          delete-buffer
-                                          kit'
-                           else
-                               printf 'evaluate-commands -client %s fail Commit failed\n' "$kak_client"
-                           fi
-                       }
-                   }"
-    }
 }
 
 
