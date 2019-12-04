@@ -40,7 +40,7 @@ define-command -hidden kit-refresh %{
 define-command kit %{
     edit -scratch *kit*
     set-option buffer filetype kit
-    kit-rebuild
+    kit-refresh
 }
 
 define-command -hidden kit-commit %{
