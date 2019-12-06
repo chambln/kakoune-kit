@@ -13,7 +13,7 @@ define-command -hidden kit-select %{
         # Select paths
         execute-keys '<a-x>s^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S → <ret>'
         map window normal -docstring add a ': kit-add<ret>'
-        map window normal -docstring diff d ': git diff -- %val{selections}<a-!><ret>'
+        map window normal -docstring diff d ': kit-diff %val{selections}<a-!><ret>'
         map window normal -docstring subtract r ': kit-subtract<ret>'
     } catch %{
         # Select truncated SHA-1
@@ -58,6 +58,33 @@ define-command -hidden kit-commit %{
                                printf 'evaluate-commands -client %s fail Commit failed\n' "$kak_client"
                            fi
                        }
+                   }"
+    }
+}
+
+
+define-command -hidden -params .. kit-diff %{
+    evaluate-commands %sh{
+        patchfile="$(git rev-parse --git-dir)/ADD_EDIT.patch"
+        GIT_EDITOR='' EDITOR='' git add -e $@ > /dev/null 2>&1
+        printf %s "try %{
+                       edit -existing '$patchfile'
+                       hook buffer BufWritePost '.*\Q$patchfile\E' %{
+                           evaluate-commands %sh{
+                               if git apply --cache --recount '$patchfile' > /dev/null; then
+                                   printf %s 'evaluate-commands -try-client $kak_client echo -markup %{{Information}Staged successfully}
+                                              delete-buffer
+                                              kit'
+                               else
+                                   printf 'evaluate-commands -try-client %s fail Staging failed\n' "$kak_client"
+                               fi
+                           }
+                       }
+                       hook buffer BufClose '.*\Q$patchfile\E' %{
+                           nop %sh{ rm -f '$patchfile' }
+                       }
+                   } catch %{
+                       git diff -- "$@"
                    }"
     }
 }
