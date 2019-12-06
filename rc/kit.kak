@@ -102,8 +102,8 @@ define-command -hidden kit-add %{
 define-command -hidden kit-subtract %{
     evaluate-commands -itersel %{
         nop %sh{
-            target="$(git rev-parse --show-toplevel)/$kak_selection"
-            git reset -- "$target" || git restore --staged -- "$target"
+            pathspec="$(git rev-parse --show-toplevel)/$kak_selection"
+            git reset -- "$pathspec" || git restore --staged -- "$pathspec"
         }
     }
     kit-refresh
