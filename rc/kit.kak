@@ -43,6 +43,7 @@ define-command kit %{
     kit-refresh
 }
 
+
 define-command -hidden kit-commit %{
     evaluate-commands %sh{
         GIT_EDITOR='' EDITOR='' git commit > /dev/null 2>&1
@@ -51,11 +52,11 @@ define-command -hidden kit-commit %{
                    hook buffer BufWritePost '.*\Q$msgfile\E' %{
                        evaluate-commands %sh{
                            if git commit -F '$msgfile' --cleanup=strip $* > /dev/null; then
-                               printf %s 'evaluate-commands -client $kak_client echo -markup %{{Information}Commit succeeded}
-                                          delete-buffer
-                                          kit'
+                               printf %s 'delete-buffer
+                                          kit
+                                          evaluate-commands -try-client $kak_client echo -markup %{{Information}Commit succeeded}'
                            else
-                               printf 'evaluate-commands -client %s fail Commit failed\n' "$kak_client"
+                               printf 'evaluate-commands -try-client %s fail Commit failed\n' "$kak_client"
                            fi
                        }
                    }"
