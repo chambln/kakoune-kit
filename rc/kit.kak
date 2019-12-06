@@ -67,7 +67,7 @@ define-command -hidden kit-commit %{
 define-command -hidden -params .. kit-diff %{
     evaluate-commands %sh{
         patchfile="$(git rev-parse --git-dir)/ADD_EDIT.patch"
-        GIT_EDITOR='' EDITOR='' git add -e $@ > /dev/null 2>&1
+        GIT_EDITOR='' EDITOR='' git add -e "$@" > /dev/null 2>&1
         printf %s "try %{
                        edit -existing '$patchfile'
                        hook buffer BufWritePost '.*\Q$patchfile\E' %{
