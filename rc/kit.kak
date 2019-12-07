@@ -17,7 +17,7 @@ define-command -hidden kit-select %{
         map window normal -docstring subtract r ': kit-subtract<ret>'
     } catch %{
         # Select truncated SHA-1
-        execute-keys '<a-x>s^[0-9a-f]{4,} <ret><a-:>H'
+        execute-keys '<a-x>s^[0-9a-f]{4,40} <ret><a-:>H'
         map window normal -docstring show d ': git show %val{selections}<a-!><ret>'
     } catch nop
 }
