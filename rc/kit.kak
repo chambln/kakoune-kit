@@ -1,16 +1,10 @@
-define-command -hidden kit-select-path %{
-    execute-keys 's^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S -> <ret>'
-}
-define-command -hidden kit-select-sha1 %{
-    execute-keys 's^[0-9a-f]{4,40} <ret><a-:>H'
-}
 define-command -hidden kit-select %{
     execute-keys <a-x>
     try %{
-        kit-select-path
+        execute-keys 's^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S -> <ret>'
         map window normal d ': git diff -- %val{selections}<a-!><ret>'
     } catch %{
-        kit-select-sha1
+        execute-keys 's^[0-9a-f]{4,40} <ret><a-:>H'
         map window normal d ': git show %val{selections}<a-!><ret>'
     } catch %{
         unmap window normal d
