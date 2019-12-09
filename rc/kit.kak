@@ -32,8 +32,12 @@ define-command kit %{
 hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit group
     add-highlighter window/kit/ regex '^Recent commits:$' 0:title
-    add-highlighter window/kit/ regex '^[0-9a-f]{7} ' 0:comment
-    add-highlighter window/kit/ regex '^(##) (\S+)(( \[[^\n]+\]))?' 1:comment 2:builtin 3:keyword
+    add-highlighter window/kit/ regex '^[0-9a-f]{4,40} ' 0:comment
+    add-highlighter window/kit/ regex '^## ' 0:comment
+    add-highlighter window/kit/ regex '^## (\S+)' 1:green
+    add-highlighter window/kit/ regex '^## (\S+)(\.\.)(\S+)' 1:green 2:comment 3:red
+    add-highlighter window/kit/ regex '^## \S+ \[[^\n]*ahead (\d+)[^\n]*\]' 1:green
+    add-highlighter window/kit/ regex '^## \S+ \[[^\n]*behind (\d+)[^\n]*\]' 1:red
     add-highlighter window/kit/ regex '^(?:(A)|(C)|([D!?])|([MU])|(R)|(T))[ !\?ACDMRTU] (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
     add-highlighter window/kit/ regex '^[ !\?ACDMRTU](?:(A)|(C)|([D!?])|([MU])|(R)|(T)) (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
     add-highlighter window/kit/ regex '^R[ !\?ACDMRTU] [^\n]+( -> )' 1:cyan
