@@ -6,7 +6,15 @@ define-command -hidden kit-select-sha1 %{
 }
 define-command -hidden kit-select %{
     execute-keys <a-x>
-    try kit-select-path catch kit-select-sha1 catch nop
+    try %{
+        kit-select-path
+        map window normal d ': git diff -- %val{selections}<a-!><ret>'
+    } catch %{
+        kit-select-sha1
+        map window normal d ': git show %val{selections}<a-!><ret>'
+    } catch %{
+        unmap window normal d
+    }
 }
 
 define-command -hidden kit-rebuild %{
@@ -48,7 +56,6 @@ hook -group kit global WinSetOption filetype=kit %{
     map window normal <esc>       ': try kit-select<ret>'
     map window normal a ': git add   -- %val{selections}<a-!>;kit-refresh<ret>'
     map window normal r ': git reset -- %val{selections}<a-!>;kit-refresh<ret>'
-    map window normal d ': git diff  -- %val{selections}<a-!><ret>'
     map window normal c ': git commit<ret>'
 
     hook -once -always window WinSetOption filetype=.* %{
