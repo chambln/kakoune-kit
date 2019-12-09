@@ -6,16 +6,15 @@ There’s no magic here.
 
   - [ ] Init and clone
   - [x] Summon diffs of selected pathspecs
-    - Fails if Kakoune’s working directory isn’t the repo’s toplevel
-  - [ ] Summon diffs of selected commits
+  - [x] Summon diffs of selected commits
   - [x] Stage and unstage files
   - [ ] Stage hunks
   - [x] Create commits
-    - Relies on `git.kak` for now
   - [ ] Create tags
   - [ ] Create branches
   - [ ] Explore history
   - [ ] Merge
+  - [ ] Rebase
   - [ ] Stash
   - [ ] Fetch
   - [ ] Pull
