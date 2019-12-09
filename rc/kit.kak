@@ -22,14 +22,12 @@ define-command -hidden kit-refresh %{
     execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret><a-:>'
 }
 
-
 define-command kit %{
     edit -scratch *kit*
     set-option buffer filetype kit
     kit-rebuild
     try kit-select
 }
-
 
 hook -group kit global WinSetOption filetype=kit %{
     add-highlighter window/kit group
