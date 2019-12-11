@@ -55,5 +55,11 @@ hook -group kit global WinSetOption filetype=kit %{
         remove-highlighter window/kit
         remove-hooks window kit
         set-option buffer readonly false
+        unmap window normal <semicolon> ': try kit-select<ret>'
+        unmap window normal <esc>       ': try kit-select<ret>'
+        unmap window normal a ': git add   -- %val{selections}<a-!>;kit-refresh<ret>'
+        unmap window normal r ': git reset -- %val{selections}<a-!>;kit-refresh<ret>'
+        unmap window normal c ': git commit<ret>'
+        unmap window normal d
     }
 }
