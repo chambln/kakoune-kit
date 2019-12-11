@@ -2,14 +2,14 @@ define-command -hidden kit-select %{
     execute-keys <a-x>
     try %{
         execute-keys '2s^[ !\?ACDMRTU]{2} ([^\n]+ -> )?([^\n]+)<ret>'
-        map window normal d ': git diff -- %val{selections}<a-!><ret>'
         map window normal a ': git add   -- %val{selections}<a-!>;kit-refresh<ret>'
+        map window normal d ': git diff -- %val{selections}<a-!><ret>'
         map window normal r ': git reset -- %val{selections}<a-!>;kit-refresh<ret>'
     } catch %{
         execute-keys '1s^([0-9a-f]{4,40}) [^\n]+<ret>'
         unmap window normal a
-        unmap window normal r
         map window normal d ': git show %val{selections}<a-!><ret>'
+        unmap window normal r
     } catch %{
         unmap window normal a
         unmap window normal d
