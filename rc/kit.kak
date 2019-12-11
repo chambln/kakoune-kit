@@ -1,13 +1,14 @@
 define-command -hidden kit-select %{
     execute-keys <a-x>
     try %{
-        execute-keys 's^[ !\?ACDMRTU]{2} <ret><a-:>l<a-l>S -> <ret>'
+        execute-keys '2s^[ !\?ACDMRTU]{2} ([^\n]+ -> )?([^\n]+)<ret>'
         map window normal d ': git diff -- %val{selections}<a-!><ret>'
     } catch %{
-        execute-keys 's^[0-9a-f]{4,40} <ret><a-:>H'
+        execute-keys '1s^([0-9a-f]{4,40}) [^\n]+<ret>'
         map window normal d ': git show %val{selections}<a-!><ret>'
     } catch %{
         unmap window normal d
+        execute-keys '1s^## (\S+)<ret>'
     }
 }
 
