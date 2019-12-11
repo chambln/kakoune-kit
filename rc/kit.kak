@@ -14,7 +14,6 @@ define-command -hidden kit-select %{
         unmap window normal a
         unmap window normal d
         unmap window normal r
-        execute-keys '1s^## (\S+)<ret>'
     }
 }
 
