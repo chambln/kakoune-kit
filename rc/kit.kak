@@ -3,11 +3,17 @@ define-command -hidden kit-select %{
     try %{
         execute-keys '2s^[ !\?ACDMRTU]{2} ([^\n]+ -> )?([^\n]+)<ret>'
         map window normal d ': git diff -- %val{selections}<a-!><ret>'
+        map window normal a ': git add   -- %val{selections}<a-!>;kit-refresh<ret>'
+        map window normal r ': git reset -- %val{selections}<a-!>;kit-refresh<ret>'
     } catch %{
         execute-keys '1s^([0-9a-f]{4,40}) [^\n]+<ret>'
+        unmap window normal a
+        unmap window normal r
         map window normal d ': git show %val{selections}<a-!><ret>'
     } catch %{
+        unmap window normal a
         unmap window normal d
+        unmap window normal r
         execute-keys '1s^## (\S+)<ret>'
     }
 }
@@ -47,9 +53,8 @@ hook -group kit global WinSetOption filetype=kit %{
 
     map window normal <semicolon> ': try kit-select<ret>'
     map window normal <esc>       ': try kit-select<ret>'
-    map window normal a ': git add   -- %val{selections}<a-!>;kit-refresh<ret>'
-    map window normal r ': git reset -- %val{selections}<a-!>;kit-refresh<ret>'
     map window normal c ': git commit<ret>'
+    map window normal l ': git log<ret>'
 
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit
@@ -57,9 +62,10 @@ hook -group kit global WinSetOption filetype=kit %{
         set-option buffer readonly false
         unmap window normal <semicolon> ': try kit-select<ret>'
         unmap window normal <esc>       ': try kit-select<ret>'
-        unmap window normal a ': git add   -- %val{selections}<a-!>;kit-refresh<ret>'
-        unmap window normal r ': git reset -- %val{selections}<a-!>;kit-refresh<ret>'
+        unmap window normal a
         unmap window normal c ': git commit<ret>'
         unmap window normal d
+        unmap window normal l ': git log<ret>'
+        unmap window normal r
     }
 }
