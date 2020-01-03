@@ -1,70 +1,56 @@
-define-command -hidden kit-select %{
-    execute-keys <a-x>
+define-command kit-status-select %{
     try %{
-        execute-keys '2s^[ !\?ACDMRTU]{2} ([^\n]+ -> )?([^\n]+)<ret>'
-        map window normal a ': git add   -- %val{selections}<a-!>;kit-refresh<ret>'
-        map window normal d ': git diff  -- %val{selections}<a-!><ret>'
-        map window normal r ': git reset -- %val{selections}<a-!>;kit-refresh<ret>'
-    } catch %{
-        execute-keys '1s^([0-9a-f]{4,40}) [^\n]+<ret>'
-        unmap window normal a
-        map window normal d ': git show %val{selections}<a-!><ret>'
-        unmap window normal r
-    } catch %{
-        unmap window normal a
-        unmap window normal d
-        unmap window normal r
+        execute-keys '<a-:><a-x>1s^(?:[ !\?ACDMRTU]{2}|\t(?:(?:both )?modified:|added:|new file:|deleted(?: by \w+)?:|renamed:|copied:))?\h+(?:[^\n]+ -> )?([^\n]+)<ret>'
     }
 }
 
-define-command -hidden kit-rebuild %{
-    set-option buffer readonly false
-    execute-keys '%"_cRecent commits:<ret>'
-    execute-keys '<a-;>!git log -6 --oneline<ret><ret><esc>'
-    execute-keys '|git status -bs<ret><a-;>J'
-    set-option buffer readonly true
-}
-define-command -hidden kit-refresh %{
-    execute-keys '*: kit-rebuild; try %{exec s<lt>ret<gt>}<ret><a-:>'
+define-command kit-log-select %{
+    try %{
+        execute-keys '<a-x>2s^[\*|\\ /]*(commit )?(\b[0-9a-f]{4,40}\b)<ret><a-:>'
+    }
 }
 
-define-command kit %{
-    edit -scratch *kit*
-    set-option buffer filetype kit
-    kit-rebuild
-    try kit-select
-}
+hook -group kit-status global WinSetOption filetype=git-status %{
+    add-highlighter window/kit-status group
+    add-highlighter window/kit-status/ regex '^## ' 0:comment
+    add-highlighter window/kit-status/ regex '^## (\S*[^\s\.@])' 1:green
+    add-highlighter window/kit-status/ regex '^## (\S*[^\s\.@])(\.\.+)(\S*[^\s\.@])' 1:green 2:comment 3:red
+    add-highlighter window/kit-status/ regex '^(##) (No commits yet on) (\S*[^\s\.@])' 1:comment 2:Default 3:green
+    add-highlighter window/kit-status/ regex '^## \S+ \[[^\n]*ahead (\d+)[^\n]*\]' 1:green
+    add-highlighter window/kit-status/ regex '^## \S+ \[[^\n]*behind (\d+)[^\n]*\]' 1:red
+    add-highlighter window/kit-status/ regex '^(?:(A)|(C)|([D!?])|([MU])|(R)|(T))[ !\?ACDMRTU]\h' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
+    add-highlighter window/kit-status/ regex '^[ !\?ACDMRTU](?:(A)|(C)|([D!?])|([MU])|(R)|(T))\h' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
+    add-highlighter window/kit-status/ regex '^R[ !\?ACDMRTU] [^\n]+( -> )' 1:cyan
+    add-highlighter window/kit-status/ regex '^\h+(?:((?:both )?modified:)|(added:|new file:)|(deleted(?: by \w+)?:)|(renamed:)|(copied:))(?:.*?)$' 1:yellow 2:green 3:red 4:cyan 5:blue 6:magenta
 
-hook -group kit global WinSetOption filetype=kit %{
-    add-highlighter window/kit group
-    add-highlighter window/kit/ regex '^Recent commits:$' 0:title
-    add-highlighter window/kit/ regex '^[0-9a-f]{4,40} ' 0:comment
-    add-highlighter window/kit/ regex '^## ' 0:comment
-    add-highlighter window/kit/ regex '^## (\S*[^\s\.@])' 1:green
-    add-highlighter window/kit/ regex '^## (\S*[^\s\.@])(\.\.+)(\S+)' 1:green 2:comment 3:red
-    add-highlighter window/kit/ regex '^## \S+ \[[^\n]*ahead (\d+)[^\n]*\]' 1:green
-    add-highlighter window/kit/ regex '^## \S+ \[[^\n]*behind (\d+)[^\n]*\]' 1:red
-    add-highlighter window/kit/ regex '^(?:(A)|(C)|([D!?])|([MU])|(R)|(T))[ !\?ACDMRTU] (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
-    add-highlighter window/kit/ regex '^[ !\?ACDMRTU](?:(A)|(C)|([D!?])|([MU])|(R)|(T)) (?:.+?)$' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
-    add-highlighter window/kit/ regex '^R[ !\?ACDMRTU] [^\n]+( -> )' 1:cyan
+    hook -group kit-status window NormalKey '[JKjk%]|<esc>' kit-status-select
 
-    hook -group kit window NormalKey '[JKjkhlHL%]' %{ try kit-select }
-
-    map window normal <semicolon> ': try kit-select<ret>'
-    map window normal <esc>       ': try kit-select<ret>'
-    map window normal c ': git commit<ret>'
-    map window normal l ': git log<ret>'
+    map window normal <semicolon> ': kit-status-select<ret>'
+    map window normal c ': git diff --cached<ret>: git commit '
+    map window normal d ': -- %val{selections}<a-!><home>git diff '
+    map window normal a ': -- %val{selections}<a-!><home>git add '
+    map window normal r ': -- %val{selections}<a-!><home>git reset '
 
     hook -once -always window WinSetOption filetype=.* %{
-        remove-highlighter window/kit
-        remove-hooks window kit
+        remove-highlighter window/kit-status
+        remove-hooks window kit-status
         set-option buffer readonly false
-        unmap window normal <semicolon> ': try kit-select<ret>'
-        unmap window normal <esc>       ': try kit-select<ret>'
-        unmap window normal a
-        unmap window normal c ': git commit<ret>'
-        unmap window normal d
-        unmap window normal l ': git log<ret>'
-        unmap window normal r
+    }
+}
+
+hook -group kit-log global WinSetOption filetype=git-log %{
+    add-highlighter window/kit-log group
+    add-highlighter window/kit-log/ regex '^([\*|\\ /])*' 0:keyword
+    add-highlighter window/kit-log/ regex '^( ?[\*|\\/])*\h{,4}(commit )?(\b[0-9a-f]{4,40}\b)' 2:keyword 3:comment
+    add-highlighter window/kit-log/ regex '^( ?[\*|\\/])*\h{,4}([a-zA-Z_-]+:) (.*?)$' 2:variable 3:value
+
+    hook -group kit-log window NormalKey '[JKjk%]|<esc>' kit-log-select
+
+    map window normal <semicolon> ': kit-log-select<ret>'
+
+    hook -once -always window WinSetOption filetype=.* %{
+        remove-highlighter window/kit-log
+        remove-hooks window kit-log
+        set-option buffer readonly false
     }
 }
