@@ -22,19 +22,20 @@ hook -group kit-status global WinSetOption filetype=git-status %{
     add-highlighter window/kit-status/ regex '^[ !\?ACDMRTU](?:(A)|(C)|([D!?])|([MU])|(R)|(T))\h' 1:green 2:blue 3:red 4:yellow 5:cyan 6:cyan
     add-highlighter window/kit-status/ regex '^R[ !\?ACDMRTU] [^\n]+( -> )' 1:cyan
     add-highlighter window/kit-status/ regex '^\h+(?:((?:both )?modified:)|(added:|new file:)|(deleted(?: by \w+)?:)|(renamed:)|(copied:))(?:.*?)$' 1:yellow 2:green 3:red 4:cyan 5:blue 6:magenta
-
     hook -group kit-status window NormalKey '[JKjk%]|<esc>' kit-status-select
-
     map window normal <semicolon> ': kit-status-select<ret>'
     map window normal c ': git diff --cached<ret>: git commit '
     map window normal d ': -- %val{selections}<a-!><home>git diff '
     map window normal a ': -- %val{selections}<a-!><home>git add '
     map window normal r ': -- %val{selections}<a-!><home>git reset '
-
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit-status
         remove-hooks window kit-status
-        set-option buffer readonly false
+        unmap window normal <semicolon> ': kit-status-select<ret>'
+        unmap window normal c
+        unmap window normal d
+        unmap window normal a
+        unmap window normal r
     }
 }
 
@@ -43,14 +44,11 @@ hook -group kit-log global WinSetOption filetype=git-log %{
     add-highlighter window/kit-log/ regex '^([\*|\\ /])*' 0:keyword
     add-highlighter window/kit-log/ regex '^( ?[\*|\\/])*\h{,4}(commit )?(\b[0-9a-f]{4,40}\b)' 2:keyword 3:comment
     add-highlighter window/kit-log/ regex '^( ?[\*|\\/])*\h{,4}([a-zA-Z_-]+:) (.*?)$' 2:variable 3:value
-
     hook -group kit-log window NormalKey '[JKjk%]|<esc>' kit-log-select
-
     map window normal <semicolon> ': kit-log-select<ret>'
-
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit-log
         remove-hooks window kit-log
-        set-option buffer readonly false
+        unmap window normal <semicolon>
     }
 }
