@@ -24,7 +24,7 @@ hook -group kit-status global WinSetOption filetype=git-status %{
     add-highlighter window/kit-status/ regex '^\h+(?:((?:both )?modified:)|(added:|new file:)|(deleted(?: by \w+)?:)|(renamed:)|(copied:))(?:.*?)$' 1:yellow 2:green 3:red 4:cyan 5:blue 6:magenta
     hook -group kit-status window NormalKey '[JKjk%]|<esc>' kit-status-select
     map window normal <semicolon> ': kit-status-select<ret>'
-    map window normal c ': git diff --cached<ret>: git commit '
+    map window normal c ': git commit '
     map window normal d ': -- %val{selections}<a-!><home>git diff '
     map window normal a ': -- %val{selections}<a-!><home>git add '
     map window normal r ': -- %val{selections}<a-!><home>git reset '
