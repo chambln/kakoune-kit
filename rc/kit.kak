@@ -1,10 +1,10 @@
-define-command kit-status-select %{
+define-command -hidden kit-status-select %{
     try %{
         execute-keys '<a-:><a-x>1s^(?:[ !\?ACDMRTUacdmrtu]{2}|\t(?:(?:both )?modified:|added:|new file:|deleted(?: by \w+)?:|renamed:|copied:))?\h+(?:[^\n]+ -> )?([^\n]+)<ret>'
     }
 }
 
-define-command kit-log-select %{
+define-command -hidden kit-log-select %{
     try %{
         execute-keys '<a-x>2s^[\*|\\ /]*(commit )?(\b[0-9a-f]{4,40}\b)<ret><a-:>'
     }
