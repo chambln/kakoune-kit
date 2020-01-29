@@ -6,7 +6,7 @@ define-command -hidden kit-status-select %{
 
 define-command -hidden kit-log-select %{
     try %{
-        execute-keys '<a-x>2s^[\*|\\ /]*(commit )?(\b[0-9a-f]{4,40}\b)<ret><a-:>'
+        execute-keys '<a-x>2s^[\*|\\ /_]*(commit )?(\b[0-9a-f]{4,40}\b)<ret><a-:>'
     }
 }
 
@@ -31,9 +31,9 @@ hook -group kit-status global WinSetOption filetype=git-status %{
 
 hook -group kit-log global WinSetOption filetype=git-log %{
     add-highlighter window/kit-log group
-    add-highlighter window/kit-log/ regex '^([\*|\\ /])*' 0:keyword
-    add-highlighter window/kit-log/ regex '^( ?[\*|\\/])*\h{,3}(commit )?(\b[0-9a-f]{4,40}\b)' 2:keyword 3:comment
-    add-highlighter window/kit-log/ regex '^( ?[\*|\\/])*\h{,3}([a-zA-Z_-]+:) (.*?)$' 2:variable 3:value
+    add-highlighter window/kit-log/ regex '^([\*|\\ /_])*' 0:keyword
+    add-highlighter window/kit-log/ regex '^( ?[\*|\\/_])*\h{,3}(commit )?(\b[0-9a-f]{4,40}\b)' 2:keyword 3:comment
+    add-highlighter window/kit-log/ regex '^( ?[\*|\\/_])*\h{,3}([a-zA-Z_-]+:) (.*?)$' 2:variable 3:value
     hook -group kit-log window NormalKey '[JKjk%]|<esc>' kit-log-select
     hook -once -always window WinSetOption filetype=.* %{
         remove-highlighter window/kit-log
