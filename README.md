@@ -1,23 +1,35 @@
 # Kit – A Git porcelain inside [Kakoune](https://kakoune.org)
 
-There’s no magic here.
+This plugin is far from complete, but not totally useless right now.
 
-## To-do
+So far it’s just a few hooks that coerce the selection onto the file
+paths and SHA1s in `:git status -s` and `:git log` buffers. Combine this
+with `: … %val{selections}<a-!> …` mappings to create a
+selection-oriented Git interface.
 
-  - [ ] Init and clone
-  - [x] Summon diffs of selected pathspecs
-  - [x] Summon diffs of selected commits
-  - [x] Stage and unstage files
-  - [ ] Stage hunks
-  - [x] Create commits
-  - [ ] Create tags
-  - [ ] Create branches
-  - [ ] Explore history
-  - [ ] Merge
-  - [ ] Rebase
-  - [ ] Stash
-  - [ ] Fetch
-  - [ ] Pull
-  - [ ] Push
-  - [ ] Manage remotes
-  - [ ] …
+See also <https://github.com/mawww/kakoune/pull/3325>.
+
+## Configuration
+
+Suggested configuration:
+
+``` kak
+plug chambln/kakoune-kit config %{
+    map global user g ': git status -bs<ret>' -docstring 'git status'
+    hook global WinSetOption filetype=git-status %{
+        map window normal c ': git commit --verbose '
+        map window normal l ': git log --oneline --graph<ret>'
+        map window normal d ': -- %val{selections}<a-!><home> git diff '
+        map window normal D ': -- %val{selections}<a-!><home> git diff --cached '
+        map window normal a ': -- %val{selections}<a-!><home> git add '
+        map window normal A ': -- %val{selections}<a-!><home> repl git add -p '
+        map window normal r ': -- %val{selections}<a-!><home> git reset '
+        map window normal R ': -- %val{selections}<a-!><home> repl git reset -p '
+        map window normal o ': -- %val{selections}<a-!><home> git checkout '
+    }
+    hook global WinSetOption filetype=git-log %{
+        map window normal l ': git log --oneline --graph<ret>'
+        map window normal d ': %val{selections}<a-!><home> git show '
+    }
+}
+```
