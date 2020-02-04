@@ -28,8 +28,11 @@ plug chambln/kakoune-kit config %{
         map window normal o ': -- %val{selections}<a-!><home> git checkout '
     }
     hook global WinSetOption filetype=git-log %{
-        map window normal l ': git log --oneline --graph<ret>'
-        map window normal d ': %val{selections}<a-!><home> git show '
+        map window normal d     ': %val{selections}<a-!><home> git diff '
+        map window normal <ret> ': %val{selections}<a-!><home> git show '
+        map window normal r     ': %val{selections}<a-!><home> git reset '
+        map window normal R     ': %val{selections}<a-!><home> repl git reset -p '
+        map window normal o     ': %val{selections}<a-!><home> git checkout '
     }
 }
 ```
