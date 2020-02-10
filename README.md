@@ -7,8 +7,6 @@ paths and SHA1s in `:git status -s` and `:git log` buffers. Combine this
 with `: … %val{selections}<a-!> …` mappings to create a
 selection-oriented Git interface.
 
-See also <https://github.com/mawww/kakoune/pull/3325>.
-
 ## Configuration
 
 Suggested configuration:
