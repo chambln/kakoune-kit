@@ -37,4 +37,5 @@ plug chambln/kakoune-kit config %{
 
 Note: The `repl` commands above do not seem to work with Kakoune’s
 tmux windowing backend because it is not designed to accept multiple
-arguments for some reason.
+arguments for some reason (see
+[mawww/kakoune#3680](https://github.com/mawww/kakoune/issues/3680)).
