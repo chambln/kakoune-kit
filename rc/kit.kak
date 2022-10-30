@@ -6,8 +6,10 @@ define-command -hidden kit-status-select %{
 
 define-command -hidden kit-log-select %{
     try %{
-        execute-keys '<a-x>2s^[\*|\\ /_]*(\w+)?(\b[0-9a-f]{4,40}\b)<ret><a-:>'
-    }
+        execute-keys '<a-x>1s^[\*|\\ /_]*(?:commit )?(\b[0-9a-f]{4,40}\b)<ret><a-:>'
+    } catch %{
+        execute-keys '<a-x>1s[\*|\\ /_]*(?:\w+: *)([^\n]*)<ret>'
+    } catch %{}
 }
 
 hook -group kit-status global WinSetOption filetype=git-status %{
