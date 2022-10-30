@@ -16,7 +16,7 @@ plug chambln/kakoune-kit config %{
     map global user g ': git status -bs<ret>' -docstring 'git status'
     hook global WinSetOption filetype=git-status %{
         map window normal c ': git commit --verbose '
-        map window normal l ': git log --oneline --graph<ret>'
+        map window normal l ': git log --oneline --graph -- <c-x>f'
         map window normal d ': -- %val{selections}<a-!><home> git diff '
         map window normal D ': -- %val{selections}<a-!><home> git diff --cached '
         map window normal a ': -- %val{selections}<a-!><home> git add '
